@@ -27,11 +27,6 @@ include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)
 
 function(save_compile_option)
-    # Save the CMAKE_REQUIRED_QUIET variable
-    set(_CMAKE_REQUIRED_QUIET ${CMAKE_REQUIRED_QUIET})
-    # Silence CMake's logging for check_c_compiler_flag
-    set(CMAKE_REQUIRED_QUIET TRUE)
-
     foreach(_flag ${ARGN})
 
         set(FLAG_VARNAME "COMPILE_FLAG${_flag}_SUPPORTED")
@@ -52,10 +47,6 @@ function(save_compile_option)
 
     set(SAVED_CFLAG_LIST ${SAVED_CFLAG_LIST} PARENT_SCOPE)
     set(SAVED_CXXFLAG_LIST ${SAVED_CXXFLAG_LIST} PARENT_SCOPE)
-
-    # reset CMAKE_REQUIRED_QUIET
-    set(CMAKE_REQUIRED_QUIET ${_CMAKE_REQUIRED_QUIET})
-
 endfunction(save_compile_option)
 
 function(target_apply_saved_options)
