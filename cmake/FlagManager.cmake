@@ -37,7 +37,7 @@ include(CheckCXXCompilerFlag)
 function(save_compile_option)
 
     set(options CXX_ONLY)
-    set(oneValueArgs)
+    set(oneValueArgs LIST_NAME)
     set(multiValueArgs)
 
     cmake_parse_arguments(
@@ -47,6 +47,20 @@ function(save_compile_option)
         "${multiValueArgs}"
         ${ARGN}
     )
+
+    string(LENGTH "${ARGUMENTS_LIST_NAME}" LN_LENGTH)
+
+    if(LN_LENGTH EQUAL 0)
+        set(LIST_NAME "LIST")
+    else()
+        set(LIST_NAME ${ARGUMENTS_LIST_NAME})
+    endif()
+
+    set(CFLAG_LIST_NAME "SAVED_CFLAG_${LIST_NAME}")
+    set(CXXFLAG_LIST_NAME "SAVED_CXXFLAG_${LIST_NAME}")
+
+    set(CFLAG_LIST)
+    set(CXXFLAG_LIST)
 
     foreach(_flag ${ARGUMENTS_UNPARSED_ARGUMENTS})
 
@@ -57,24 +71,28 @@ function(save_compile_option)
         if(NOT ${ARGUMENTS_CXX_ONLY})
             check_c_compiler_flag(${_flag} ${CFLAG_VARNAME})
             if(${CFLAG_VARNAME})
-                list(APPEND SAVED_CFLAG_LIST ${_flag})
+                list(APPEND ${CFLAG_LIST_NAME} ${_flag})
             endif()
         endif()
 
         check_cxx_compiler_flag(${_flag} ${CXXFLAG_VARNAME})
         if(${CXXFLAG_VARNAME})
-            list(APPEND SAVED_CXXFLAG_LIST ${_flag})
+            list(APPEND ${CXXFLAG_LIST_NAME} ${_flag})
         endif()
 
     endforeach(_flag ${ARGN})
 
-    set(SAVED_CFLAG_LIST ${SAVED_CFLAG_LIST} PARENT_SCOPE)
-    set(SAVED_CXXFLAG_LIST ${SAVED_CXXFLAG_LIST} PARENT_SCOPE)
+    # message(STATUS "Final C Flags: ${${CFLAG_LIST_NAME}}")
+    # message(STATUS "Final CXX Flags: ${${CXXFLAG_LIST_NAME}}")
+
+    set(${CFLAG_LIST_NAME} ${${CFLAG_LIST_NAME}} PARENT_SCOPE)
+    set(${CXXFLAG_LIST_NAME} ${${CXXFLAG_LIST_NAME}} PARENT_SCOPE)
+
 endfunction(save_compile_option)
 
 function(target_apply_saved_options)
     set(options PUBLIC)
-    set(oneValueArgs)
+    set(oneValueArgs LIST_NAME)
     set(multiValueArgs)
 
     cmake_parse_arguments(
@@ -85,9 +103,14 @@ function(target_apply_saved_options)
         ${ARGN}
     )
 
-    message(STATUS "C compiler flags: ${SAVED_CFLAG_LIST}")
+    string(LENGTH "${ARGUMENTS_LIST_NAME}" LN_LENGTH)
 
-    message(STATUS "C++ compiler flags: ${SAVED_CXXFLAG_LIST}")
+    if(LN_LENGTH EQUAL 0)
+        set(LIST_NAME "LIST")
+    else()
+        set(LIST_NAME ${ARGUMENTS_LIST_NAME})
+    endif()
+
     foreach(_target ${ARGUMENTS_UNPARSED_ARGUMENTS})
 
         if(${ARGUMENTS_PUBLIC} EQUAL TRUE)
