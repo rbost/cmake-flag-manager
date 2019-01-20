@@ -23,6 +23,11 @@
 
 cmake_minimum_required(VERSION 3.0)
 
+if(__flag_manager)
+    return()
+endif()
+set(__flag_manager YES)
+
 include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)
 
