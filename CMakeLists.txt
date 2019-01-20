@@ -12,7 +12,7 @@ include(FlagManager)
 save_compile_option(-Wall -Wextra -Wgibberish)
 save_compile_option(CXX_ONLY -Weffc++)
 
-save_compile_option(LIST_NAME "Errors" CXX_ONLY -Wno-error=unknown-pragmas)
+save_compile_option(LIST_NAME "Errors" CXX_ONLY -Werror)
 
 
 add_library(test_target src/source.cpp src/source.c)

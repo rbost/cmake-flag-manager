@@ -64,7 +64,15 @@ function(save_compile_option)
 
     foreach(_flag ${ARGUMENTS_UNPARSED_ARGUMENTS})
 
-        set(FLAG_VARNAME "COMPILE_FLAG${_flag}_SUPPORTED")
+        string(
+            REPLACE
+                "-"
+                ""
+                stripped_flag
+                ${_flag}
+        )
+
+        set(FLAG_VARNAME "COMPILE_FLAG_${stripped_flag}_SUPPORTED")
         set(CFLAG_VARNAME "C_${FLAG_VARNAME}")
         set(CXXFLAG_VARNAME "CXX_${FLAG_VARNAME}")
 
@@ -82,8 +90,8 @@ function(save_compile_option)
 
     endforeach(_flag ${ARGN})
 
-    # message(STATUS "Final C Flags: ${${CFLAG_LIST_NAME}}")
-    # message(STATUS "Final CXX Flags: ${${CXXFLAG_LIST_NAME}}")
+    # message(STATUS "Final C Flags: ${${CFLAG_LIST_NAME}}") message(STATUS
+    # "Final CXX Flags: ${${CXXFLAG_LIST_NAME}}")
 
     set(${CFLAG_LIST_NAME} ${${CFLAG_LIST_NAME}} PARENT_SCOPE)
     set(${CXXFLAG_LIST_NAME} ${${CXXFLAG_LIST_NAME}} PARENT_SCOPE)
