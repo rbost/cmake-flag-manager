@@ -26,17 +26,37 @@ find_package(FlagManager)
 
 ## Usage
 
-The `FlagManager` package defines two functions:
+The `FlagManager` package defines two functions: `save_compile_option` to save compile options, and `target_apply_saved_options` to apply previously saved options.
 
-*   `save_compile_option` to add a new compile option. This function will check if the option is available for either your C or your C++ compiler, and save it to a language-specific list of compile options. The function can be passed a list of options, in which case, the availability of the options will be tested consecutively, in the given order:
+### Saving compile options
+Use `save_compile_option` to add a new compile options. This function will check if the option is available for either your C or your C++ compiler, and save it to a language-specific list of compile options. The function can be passed a list of options, in which case, the availability of the options will be tested consecutively, in the given order:
 ```CMake
 save_compile_option(-Wall -Wextra)
 ```
 
-*   `target_apply_saved_options` to apply the saved options to a list of targets:
+Note that, by default, the availability of the flag will be checked for both the C and C++ compilers. 
+If you want to only check a flag on the C++ compiler, use the `CXX_ONLY` option:
+```CMake
+save_compile_option(CXX_ONLY -Weffc++)
+```
+
+Several option lists can be used, so to support multiple configurations for multiple targets.
+To save an option to a specific list, use the `LIST_NAME` option:
+```CMake
+save_compile_option(LIST_NAME "Errors" -Werror)
+```
+
+### Applying compile options
+The `target_apply_saved_options` function is used to apply the saved options to a list of targets:
 ```CMake
 target_apply_saved_options(MyLib MyExe)
 ```
+
+To apply a specific option list, use the `LIST_NAME` option as follows:
+```CMake
+target_apply_saved_options(LIST_NAME "Errors" MyLib)
+```
+
 
 ## License
 
