@@ -10,6 +10,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(FlagManager)
 
 save_compile_option(-Wall -Wextra -Wgibberish)
+save_compile_option(CXX_ONLY -Weffc++)
 
 add_library(test_target src/source.cpp src/source.c)
 
