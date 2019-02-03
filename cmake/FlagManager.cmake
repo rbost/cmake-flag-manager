@@ -65,14 +65,15 @@ function(save_compile_option)
     foreach(_flag ${ARGUMENTS_UNPARSED_ARGUMENTS})
 
         string(
+            REGEX
             REPLACE
-                "-"
-                ""
+                "[-=]"
+                "_"
                 stripped_flag
                 ${_flag}
         )
 
-        set(FLAG_VARNAME "COMPILE_FLAG_${stripped_flag}_SUPPORTED")
+        set(FLAG_VARNAME "COMPILE_FLAG${stripped_flag}_SUPPORTED")
         set(CFLAG_VARNAME "C_${FLAG_VARNAME}")
         set(CXXFLAG_VARNAME "CXX_${FLAG_VARNAME}")
 
