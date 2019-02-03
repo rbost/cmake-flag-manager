@@ -119,25 +119,28 @@ function(target_apply_saved_options)
         set(LIST_NAME ${ARGUMENTS_LIST_NAME})
     endif()
 
+    set(CFLAG_LIST_NAME "SAVED_CFLAG_${LIST_NAME}")
+    set(CXXFLAG_LIST_NAME "SAVED_CXXFLAG_${LIST_NAME}")
+
     foreach(_target ${ARGUMENTS_UNPARSED_ARGUMENTS})
 
         if(${ARGUMENTS_PUBLIC} EQUAL TRUE)
             target_compile_options(
                 ${_target}
-                PUBLIC $<$<COMPILE_LANGUAGE:C>:${SAVED_CFLAG_LIST}>
+                PUBLIC $<$<COMPILE_LANGUAGE:C>:${${CFLAG_LIST_NAME}}>
             )
             target_compile_options(
                 ${_target}
-                PUBLIC $<$<COMPILE_LANGUAGE:CXX>:${SAVED_CXXFLAG_LIST}>
+                PUBLIC $<$<COMPILE_LANGUAGE:CXX>:${${CXXFLAG_LIST_NAME}}>
             )
         else()
             target_compile_options(
                 ${_target}
-                PRIVATE $<$<COMPILE_LANGUAGE:C>:${SAVED_CFLAG_LIST}>
+                PRIVATE $<$<COMPILE_LANGUAGE:C>:${${CFLAG_LIST_NAME}}>
             )
             target_compile_options(
                 ${_target}
-                PRIVATE $<$<COMPILE_LANGUAGE:CXX>:${SAVED_CXXFLAG_LIST}>
+                PRIVATE $<$<COMPILE_LANGUAGE:CXX>:${${CXXFLAG_LIST_NAME}}>
             )
         endif()
 

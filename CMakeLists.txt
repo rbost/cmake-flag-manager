@@ -12,7 +12,7 @@ include(FlagManager)
 save_compile_option(-Wall -Wextra -Wgibberish)
 save_compile_option(CXX_ONLY -Weffc++)
 
-save_compile_option(LIST_NAME "Errors" CXX_ONLY -Werror)
+save_compile_option(LIST_NAME "Errors" CXX_ONLY -Werror -Wextra-semi -Wpedantic -Wcast-qual)
 
 
 add_library(test_target src/source.cpp src/source.c)
